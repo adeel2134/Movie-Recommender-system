@@ -103,10 +103,17 @@ def load_model():
     ps = PorterStemmer()
 
     # Load from Google Drive
-    movies_url = 'https://drive.google.com/uc?id=14moVMaytcrxJdyWmsCAHW0f0Je8NU3F0'
-    credits_url = 'https://drive.google.com/uc?id=1FUzB655ZdePzgJzhnFsat6wd0XFBKVq-'
-    movies = pd.read_csv(movies_url)
-    credits = pd.read_csv(credits_url)
+    import gdown
+import os
+
+if not os.path.exists('tmdb_5000_movies.csv'):
+    gdown.download('https://drive.google.com/uc?id=14moVMaytcrxJdyWmsCAHW0f0Je8NU3F0', 'tmdb_5000_movies.csv', quiet=False)
+
+if not os.path.exists('tmdb_5000_credits.csv'):
+    gdown.download('https://drive.google.com/uc?id=1FUzB655ZdePzgJzhnFsat6wd0XFBKVq-', 'tmdb_5000_credits.csv', quiet=False)
+
+movies = pd.read_csv('tmdb_5000_movies.csv')
+credits = pd.read_csv('tmdb_5000_credits.csv')
 
     movies = movies.merge(credits, on='title')
     movies = movies[['movie_id', 'title', 'genres', 'keywords', 'overview', 'cast', 'crew']]
